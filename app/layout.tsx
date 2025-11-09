@@ -28,18 +28,27 @@ export default function RootLayout({
           src="https://cdn.jsdelivr.net/npm/@splinetool/viewer@1.0.0/build/spline-viewer.js"
         ></script>
         <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if (localStorage.getItem('theme') === 'light') {
-                document.documentElement.classList.remove('dark');
-              } else {
-                document.documentElement.classList.add('dark');
-              }
-            `,
-          }}
-        />
+  dangerouslySetInnerHTML={{
+    __html: `
+      (function() {
+        try {
+          const savedTheme = localStorage.getItem('theme');
+          const prefersDark = savedTheme === 'dark';
+          if (prefersDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (_) {
+          document.documentElement.classList.remove('dark'); // default → light
+        }
+      })();
+    `,
+  }}
+/>
+
       </head>
-      <body className={`font-sans antialiased`}>
+      <body className={font-sans antialiased}>
         {children}
         <Analytics />
       </body>
